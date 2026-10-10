@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1020">
+<title>NilePay — Testnet Card Lab</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1020;--panel:#121a2d;--panel2:#18223a;--line:#293653;--text:#f4f7ff;--muted:#9eacc8;--accent:#7c9cff;--green:#5ee0b0;--red:#ff8e9b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top right,#17274c 0,transparent 42%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1080px;margin:auto;padding:24px 16px 50px}.top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#7c9cff,#70e1c0);display:grid;place-items:center;color:#0b1020;font-weight:900;font-size:18px}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--muted)}h1{font-size:22px;margin:0;letter-spacing:-.03em}h2{font-size:16px;margin:0 0 14px}.muted{color:var(--muted)}.pill{border:1px solid var(--line);border-radius:999px;padding:7px 11px;color:var(--muted);font-size:12px}.pill b{color:var(--green)}
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}.panel{background:rgba(18,26,45,.94);border:1px solid var(--line);border-radius:18px;padding:19px;min-width:0}.balance-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}.metric{background:var(--panel2);padding:15px;border-radius:13px;min-width:0}.metric .label{color:var(--muted);font-size:12px}.metric .value{font-size:24px;font-weight:750;letter-spacing:-.04em;overflow-wrap:anywhere;margin-top:5px}.metric .unit{font-size:12px;color:var(--muted);font-weight:500}
+button,input{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:11px 14px;font-weight:700;background:var(--accent);color:#091126;min-height:44px}button.secondary{background:#202c47;color:var(--text);border:1px solid var(--line)}button.danger{background:#482632;color:#ffdce1;border:1px solid #77414d}button:disabled{opacity:.45;cursor:not-allowed}.actions{display:flex;gap:9px;flex-wrap:wrap}.status{font-size:13px;margin-top:12px;color:var(--muted);overflow-wrap:anywhere}.status.good{color:var(--green)}.status.bad{color:var(--red)}
+.card{min-height:210px;border-radius:17px;padding:20px;background:linear-gradient(130deg,#283f82,#5367b2 53%,#1c9d8b);position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;margin-bottom:14px}.card:after{content:"";position:absolute;width:240px;height:240px;border:1px solid #ffffff25;border-radius:50%;right:-55px;top:-100px;box-shadow:0 0 0 25px #ffffff08,0 0 0 55px #ffffff05}.cardtop,.cardbottom{display:flex;justify-content:space-between;gap:10px;position:relative;z-index:1}.cardname{font-weight:800;letter-spacing:.09em}.chip{width:38px;height:28px;border-radius:7px;background:linear-gradient(135deg,#e8d5a3,#9f956f);border:1px solid #fff5}.number{font-size:clamp(17px,3vw,22px);letter-spacing:.11em;font-variant-numeric:tabular-nums;margin:24px 0 18px;position:relative;z-index:1;overflow-wrap:anywhere}.cardbottom small{display:block;color:#e0e8ffb8;font-size:10px;letter-spacing:.12em}.cardbottom strong{font-size:13px;letter-spacing:.04em}.demo-tag{background:#111a31b8;border:1px solid #ffffff35;padding:5px 8px;border-radius:7px;font-size:10px;letter-spacing:.1em}
+label{display:block;font-size:12px;color:var(--muted);margin:12px 0 6px}input{width:100%;min-width:0;background:#0d1425;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:12px;outline:none}input:focus{border-color:var(--accent)}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.full{grid-column:1/-1}.note{font-size:12px;color:var(--muted);margin-top:10px}.warning{background:#302819;border:1px solid #64502c;color:#ffe4a8;padding:12px 14px;border-radius:12px;font-size:13px;margin:0 0 16px}.tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:11px 8px;border-bottom:1px solid var(--line);white-space:nowrap}th{font-size:11px;color:var(--muted);font-weight:600}td.hash{max-width:180px;overflow:hidden;text-overflow:ellipsis}a{color:#a9bdff}.empty{padding:20px 8px;text-align:center;color:var(--muted);font-size:13px}.sectiongap{margin-top:16px}.smallbtn{padding:6px 9px;min-height:32px;font-size:12px}.foot{margin-top:18px;text-align:center;color:var(--muted);font-size:11px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.top{align-items:flex-start}.panel{padding:15px}.metric .value{font-size:21px}.card{min-height:190px}}
+@media(max-width:380px){main{padding:16px 10px 35px}.balance-row{grid-template-columns:1fr 1fr;gap:8px}.metric{padding:11px}.metric .value{font-size:18px}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}.number{letter-spacing:.06em}}
+</style>
+</head>
+<body>
+<main id="nilepay">
+  <header class="top">
+    <div class="brand"><div class="logo">N</div><div><div class="eyebrow">Testnet project</div><h1>NilePay Card Lab</h1></div></div>
+    <div class="pill">Network: <b>TRON Nile</b></div>
+  </header>
+
+  <div class="warning"><strong>TESTNET DEMO ONLY.</strong> The card number below is fictional and cannot make real purchases. Demo payments only change this page's simulated ledger. On-chain token transfers use testnet tokens and require your wallet's confirmation.</div>
+
+  <div class="grid">
+    <section class="panel">
+      <h2>Wallet overview</h2>
+      <div class="balance-row">
+        <div class="metric"><div class="label">Test USDT balance</div><div class="value" id="usdtBalance">— <span class="unit">USDT</span></div></div>
+        <div class="metric"><div class="label">Test TRX balance</div><div class="value" id="trxBalance">— <span class="unit">TRX</span></div></div>
+      </div>
+      <div class="actions"><button id="connectBtn">Connect TronLink</button><button class="secondary" id="refreshBtn" disabled>Refresh balances</button></div>
+      <div class="status" id="walletStatus" aria-live="polite">Open this page in TronLink's DApp browser with Nile Testnet selected.</div>
+      <label for="tokenContract">Test USDT / TRC-20 contract address</label>
+      <input id="tokenContract" placeholder="Paste your Nile TRC-20 token contract address" autocomplete="off" spellcheck="false">
+      <div class="formgrid">
+        <div><label for="decimals">Token decimals</label><input id="decimals" type="number" min="0" max="18" value="6"></div>
+        <div><label for="symbol">Token symbol</label><input id="symbol" value="USDT" maxlength="12"></div>
+      </div>
+      <p class="note">Use the contract address of the test token you actually deployed or received. This app does not assume an official test-USDT contract.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Your virtual card</h2>
+      <div class="card" aria-label="Fictional test card">
+        <div class="cardtop"><div class="cardname">NILEPAY</div><div class="chip" aria-hidden="true"></div></div>
+        <div class="number" id="cardNumber">•••• •••• •••• 2048</div>
+        <div class="cardbottom"><div><small>CARDHOLDER</small><strong>TEST USER</strong></div><div><small>VALID THRU</small><strong>12/30</strong></div><div class="demo-tag">DEMO</div></div>
+      </div>
+      <div class="actions"><button class="secondary" id="newCardBtn">Generate demo number</button><button class="secondary" id="copyHintBtn">Show card disclaimer</button></div>
+      <div class="status" id="cardStatus" aria-live="polite">Fictional card details for UI testing only; no real PAN, CVV, or payment network.</div>
+    </section>
+  </div>
+
+  <div class="grid sectiongap">
+    <section class="panel">
+      <h2>Simulate a card payment</h2>
+      <div class="formgrid">
+        <div class="full"><label for="merchant">Merchant label</label><input id="merchant" placeholder="e.g. Demo Store" maxlength="50"></div>
+        <div><label for="payAmount">Amount (test units)</label><input id="payAmount" type="number" min="0.01" max="100000000" step="0.01" placeholder="10.00"></div>
+        <div><label for="payCurrency">Currency</label><input id="payCurrency" value="USDT" maxlength="12"></div>
+      </div>
+      <div class="actions sectiongap"><button id="simulateBtn">Simulate payment</button><button class="secondary" id="clearDemoBtn">Clear demo history</button></div>
+      <div class="status" id="payStatus" aria-live="polite">Simulated payments do not move tokens on-chain.</div>
+    </section>
+    <section class="panel">
+      <h2>Send test TRC-20 tokens</h2>
+      <label for="recipient">Recipient Nile address</label><input id="recipient" placeholder="T..." autocomplete="off" spellcheck="false">
+      <div class="formgrid">
+        <div class="full"><label for="sendAmount">Amount to send</label><input id="sendAmount" type="number" min="0.000001" step="any" placeholder="1.00"></div>
+      </div>
+      <div class="actions sectiongap"><button id="sendBtn" disabled>Send test tokens</button></div>
+      <div class="status" id="sendStatus" aria-live="polite">Connect wallet and enter a valid TRC-20 contract first.</div>
+      <p class="note">A wallet confirmation is required. Never enter or paste your seed phrase or private key into this website.</p>
+    </section>
+  </div>
+
+  <section class="panel sectiongap">
+    <div class="top" style="margin-bottom:6px"><h2 style="margin:0">Activity history</h2><span class="pill" id="activityCount">0 entries</span></div>
+    <div class="tablewrap"><table><thead><tr><th>TYPE</th><th>DETAIL</th><th>AMOUNT</th><th>STATUS</th><th>TX HASH / ID</th></tr></thead><tbody id="activityBody"><tr><td colspan="5" class="empty">No activity yet. Simulate a card payment or send a test token.</td></tr></tbody></table></div>
+    <p class="note">History in this starter is kept in the current page session only. On-chain transaction hashes link to NileScan; demo payment IDs are not blockchain transactions.</p>
+  </section>
+  <div class="foot">NilePay is an independent testnet demo and is not affiliated with Visa, Mastercard, TRON, or a bank.</div>
+</main>
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  let tronWeb = null, walletAddress = "", activities = [];
+  const explorer = "https://nile.tronscan.org/#/transaction/";
+  const setStatus = (id, msg, kind="") => { const el=$(id); el.textContent=msg; el.className="status"+(kind?" "+kind:""); };
+  const short = s => s ? s.slice(0,7)+"…"+s.slice(-5) : "—";
+  const fmt = n => Number.isFinite(n) ? n.toLocaleString(undefined,{maximumFractionDigits:6}) : "—";
+  function renderActivity(){
+    $("activityCount").textContent = activities.length+" entr"+(activities.length===1?"y":"ies");
+    const body=$("activityBody"); body.replaceChildren();
+    if(!activities.length){ const tr=document.createElement("tr"),td=document.createElement("td");td.colSpan=5;td.className="empty";td.textContent="No activity yet. Simulate a card payment or send a test token.";tr.append(td);body.append(tr);return; }
+    activities.forEach(a=>{
+      const tr=document.createElement("tr");
+      [a.type,a.detail,a.amount,a.status].forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.append(td);});
+      const td=document.createElement("td");
+      if(a.hash && a.onchain){const link=document.createElement("a");link.href=explorer+encodeURIComponent(a.hash);link.target="_blank";link.rel="noopener noreferrer";link.textContent=short(a.hash);link.title=a.hash;td.append(link);}
+      else {td.className="hash";td.textContent=a.hash||"—";td.title=a.hash||"";}
+      tr.append(td);body.prepend(tr);
+    });
+  }
+  function addActivity(a){ activities.unshift(a); activities=activities.slice(0,50);renderActivity(); }
+  function getContractAddress(){return $("tokenContract").value.trim();}
+  function validAddress(addr){try{return !!(tronWeb && tronWeb.isAddress(addr));}catch(e){return false;}}
+  const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+  async function detectTronLink(){
+    // TronLink injects its provider only in supported browser contexts; on mobile use its DApp browser.
+    for(let i=0;i<12;i++){
+      const provider=window.tronLink || null;
+      const candidate=(provider && provider.tronWeb) || window.tronWeb || null;
+      if(provider || candidate) return {provider, candidate};
+      await wait(250);
+    }
+    return {provider:null,candidate:null};
+  }
+  async function connect(){
+    const button=$("connectBtn"); button.disabled=true; button.textContent="Connecting…";
+    setStatus("walletStatus","Looking for the TronLink wallet provider…");
+    try{
+      let found=await detectTronLink();
+      if(!found.provider && !found.candidate){
+        throw new Error("TronLink was not detected. This file cannot connect from a normal file preview. Host it on HTTPS, then open that hosted URL inside the TronLink mobile DApp browser (or use a desktop browser with the TronLink extension). Unlock your wallet and select Nile Testnet.");
+      }
+      if(found.provider && typeof found.provider.request === "function"){
+        try { await found.provider.request({method:"tron_requestAccounts"}); }
+        catch(permissionError){ throw new Error("Wallet connection was rejected or not approved: "+(permissionError.message||String(permissionError))); }
+      } else if(!found.candidate || !found.candidate.defaultAddress || !found.candidate.defaultAddress.base58){
+        throw new Error("TronLink is present but has not exposed an unlocked account. Unlock TronLink, approve the connection, and try again.");
+      }
+      // Re-read the provider after the permission request; some wallets update it asynchronously.
+      found=await detectTronLink();
+      tronWeb=(found.provider && found.provider.tronWeb) || window.tronWeb || found.candidate || null;
+      if(!tronWeb || !tronWeb.defaultAddress || !tronWeb.defaultAddress.base58){
+        await wait(400);
+        tronWeb=(window.tronLink && window.tronLink.tronWeb) || window.tronWeb || tronWeb;
+      }
+      if(!tronWeb || !tronWeb.defaultAddress || !tronWeb.defaultAddress.base58){
+        throw new Error("TronLink opened, but no account is available. Unlock the wallet, approve this site, and try again.");
+      }
+      walletAddress=tronWeb.defaultAddress.base58;
+      $("refreshBtn").disabled=false;
+      $("connectBtn").textContent="Wallet connected";
+      $("sendBtn").disabled=!validAddress(getContractAddress());
+      const host=(tronWeb.fullNode && tronWeb.fullNode.host) || "";
+      if(host && !/nile/i.test(host)){
+        setStatus("walletStatus","Connected: "+walletAddress+". WARNING: provider endpoint does not look like Nile ("+host+"). Switch TronLink to Nile Testnet before reading balances or sending.","bad");
+      } else {
+        setStatus("walletStatus","Connected: "+walletAddress+" · Verify Nile Testnet is selected in TronLink before transactions.","good");
+      }
+      await refreshBalances();
+    }catch(e){
+      tronWeb=null;walletAddress="";$("refreshBtn").disabled=true;$("sendBtn").disabled=true;
+      button.textContent="Connect TronLink";
+      setStatus("walletStatus",e.message||String(e),"bad");
+    }finally{button.disabled=false;}
+  }
+  // Keep the displayed account in sync when TronLink changes accounts or locks.
+  window.addEventListener("message",event=>{
+    const data=event && event.data;
+    if(!data || !data.message || !data.message.action) return;
+    if(["accountsChanged","setAccount"].includes(data.message.action)){
+      const current=(window.tronLink&&window.tronLink.tronWeb)||window.tronWeb;
+      if(current && current.defaultAddress && current.defaultAddress.base58){
+        tronWeb=current;walletAddress=current.defaultAddress.base58;
+        setStatus("walletStatus","Wallet account changed: "+walletAddress,"good");
+        refreshBalances();
+      } else {
+        tronWeb=null;walletAddress="";$("refreshBtn").disabled=true;$("sendBtn").disabled=true;
+        $("connectBtn").textContent="Connect TronLink";
+        setStatus("walletStatus","Wallet disconnected or locked. Connect again to continue.");
+      }
+    }
+  });
+  async function refreshBalances(){
+    try{
+      if(!tronWeb || !walletAddress) throw new Error("Connect TronLink first.");
+      const sun=await tronWeb.trx.getBalance(walletAddress);
+      $("trxBalance").innerHTML=fmt(Number(sun)/1e6)+' <span class="unit">TRX</span>';
+      const addr=getContractAddress();
+      if(!addr){$("usdtBalance").innerHTML='— <span class="unit">'+escapeHtml($("symbol").value||"USDT")+'</span>';$("sendBtn").disabled=true;setStatus("walletStatus","Connected: "+walletAddress+" · Paste the TRC-20 contract address to load its balance.","good");return;}
+      if(!validAddress(addr)) throw new Error("Token contract address is not a valid TRON address.");
+      const contract=await tronWeb.contract().at(addr);
+      const raw=await contract.balanceOf(walletAddress).call();
+      const decimals=Number($("decimals").value);
+      if(!Number.isInteger(decimals)||decimals<0||decimals>18) throw new Error("Decimals must be an integer from 0 to 18.");
+      const rawStr=raw.toString();
+      const balance=Number(rawStr)/Math.pow(10,decimals);
+      $("usdtBalance").innerHTML=fmt(balance)+' <span class="unit">'+escapeHtml($("symbol").value||"USDT")+'</span>';
+      setStatus("walletStatus","Connected: "+walletAddress+" · Balance refreshed.","good");
+      $("sendBtn").disabled=false;
+    }catch(e){setStatus("walletStatus","Could not refresh: "+(e.message||String(e)),"bad");}
+  }
+  function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+  $("connectBtn").addEventListener("click",connect);
+  $("refreshBtn").addEventListener("click",refreshBalances);
+  $("tokenContract").addEventListener("change",()=>{if(tronWeb)refreshBalances();});
+  $("decimals").addEventListener("change",()=>{if(tronWeb)refreshBalances();});
+  $("symbol").addEventListener("change",()=>{if(tronWeb)refreshBalances();});
+  $("newCardBtn").addEventListener("click",()=>{
+    const groups=Array.from({length:3},()=>String(Math.floor(1000+Math.random()*9000)));
+    $("cardNumber").textContent="•••• "+groups.join(" ")+" "+String(Math.floor(1000+Math.random()*9000));
+    setStatus("cardStatus","Generated fictional display number. It is not a payment-card number and cannot be used for purchases.");
+  });
+  $("copyHintBtn").addEventListener("click",()=>setStatus("cardStatus","Demo only: no real card account, PAN, CVV, Visa/Mastercard network, or payment authorization exists."));
+  $("simulateBtn").addEventListener("click",()=>{
+    const merchant=$("merchant").value.trim()||"Demo Merchant",amount=Number($("payAmount").value),currency=$("payCurrency").value.trim()||"TEST";
+    if(!Number.isFinite(amount)||amount<=0||amount>100000000){setStatus("payStatus","Enter a valid amount greater than 0.","bad");return;}
+    const id="DEMO-"+Date.now().toString(36).toUpperCase();
+    addActivity({type:"CARD DEMO",detail:merchant,amount:"-"+fmt(amount)+" "+currency,status:"SIMULATED",hash:id,onchain:false});
+    setStatus("payStatus","Simulated payment recorded as "+id+". No tokens were spent and no blockchain transaction was created.","good");
+  });
+  $("clearDemoBtn").addEventListener("click",()=>{activities=activities.filter(a=>a.onchain);renderActivity();setStatus("payStatus","Demo payment history cleared. On-chain transaction entries were retained for this session.");});
+  $("sendBtn").addEventListener("click",async()=>{
+    try{
+      if(!tronWeb||!walletAddress)throw new Error("Connect TronLink first.");
+      const contractAddr=getContractAddress(),recipient=$("recipient").value.trim(),amount=Number($("sendAmount").value),decimals=Number($("decimals").value);
+      if(!validAddress(contractAddr))throw new Error("Enter a valid TRC-20 contract address.");
+      if(!validAddress(recipient))throw new Error("Enter a valid TRON recipient address.");
+      if(!Number.isFinite(amount)||amount<=0)throw new Error("Enter an amount greater than zero.");
+      if(!Number.isInteger(decimals)||decimals<0||decimals>18)throw new Error("Decimals must be an integer from 0 to 18.");
+      const scaled=Math.round(amount*Math.pow(10,decimals));
+      if(!Number.isSafeInteger(scaled)||scaled<=0)throw new Error("Amount is too large or has too many decimal places.");
+      $("sendBtn").disabled=true;setStatus("sendStatus","Preparing wallet confirmation…");
+      const contract=await tronWeb.contract().at(contractAddr);
+      const result=await contract.transfer(recipient,String(scaled)).send({feeLimit:100000000, shouldPollResponse:true});
+      const hash=typeof result==="string"?result:(result&&result.txid?result.txid:(result&&result.transaction?result.transaction.txID:""));
+      addActivity({type:"ON-CHAIN SEND",detail:short(recipient),amount:"-"+fmt(amount)+" "+($("symbol").value.trim()||"TOKEN"),status:"SUBMITTED",hash:hash||"Hash not returned",onchain:!!hash});
+      setStatus("sendStatus","Wallet returned transaction: "+(hash||JSON.stringify(result))+". Check NileScan for confirmation.","good");
+      await refreshBalances();
+    }catch(e){setStatus("sendStatus","Transfer failed or was cancelled: "+(e.message||String(e)),"bad");}
+    finally{$("sendBtn").disabled=!(tronWeb&&walletAddress&&validAddress(getContractAddress()));}
+  });
+})();
+</script>
+</body>
+</html>
